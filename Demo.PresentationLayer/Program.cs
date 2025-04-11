@@ -38,7 +38,7 @@ namespace Demo.PresentationLayer
             //contextLifetime: ServiceLifetime.Scoped, optionsLifetime: ServiceLifetime.Scoped
 
             #endregion
-            // Add services to the container.
+            /// Add services to the container.
 
 
             var app = builder.Build();
