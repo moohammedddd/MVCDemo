@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Repositiories
 {
-    public class DepartmentRepository(AppDbContext dbContext) : IDepartmentRepository
+    public class DepartmentRepository(AppDbContext _dbContext) : IDepartmentRepository
     {
-        private readonly AppDbContext _dbContext = dbContext;
+        
 
 
 
