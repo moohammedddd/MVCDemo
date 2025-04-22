@@ -1,13 +1,12 @@
 ﻿using DataAccessLayer.Migrations;
-using DataAccessLayer.Models;
 
-namespace Demo.BusinessLogic.DTOs
+namespace Demo.BusinessLogic.DTOs.DepartmentDtos
 {
-   public  class DepartmentDetailsDto
+    public class DepartmentDetailsDto
     {
 
         // Mapping Constructor
-        public DepartmentDetailsDto(DataAccessLayer.Models.Department department)
+        public DepartmentDetailsDto(DataAccessLayer.Models.Department.Department department)
         {
             DeptId = department.Id;
             Name = department.Name;

@@ -1,5 +1,5 @@
 ﻿using DataAccessLayer.Migrations;
-using DataAccessLayer.Repositiories;
+using DataAccessLayer.Repositiories.Interfaces;
 using Demo.BusinessLogic.DTOs;
 using Demo.BusinessLogic.Factory;
 using System;
@@ -7,6 +7,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Demo.BusinessLogic.Services.Interfaces;
+using Demo.BusinessLogic.Services.Classes;
+using Demo.BusinessLogic.DTOs.DepartmentDtos;
+
+
 
 
 namespace Demo.BusinessLogic.Services
@@ -48,20 +53,32 @@ namespace Demo.BusinessLogic.Services
 
 
         // Add Departemt 
-        public int? CreateDepartment(CreateDepartmantDto createDepartmantDto)
+        public int? CreateDepartment(CreateDepartmentDto createDepartmantDto)
         {
             var departmentEntity = createDepartmantDto.ToEntity();
             var res = _departmentRepository.Add(departmentEntity);
             return res;
         }
 
-        public int? UpdateDepartment(UpdateDepartmetnDto updateDepartmetnDto)
+        public int? UpdateDepartment(UpdateDepartmentDto updateDepartmetnDto)
         {
             var departmentEntity = updateDepartmetnDto.ToEntity();
             var res = _departmentRepository.Edit(departmentEntity);
             return res;
         }
 
+
+        public  bool DeleteDepartment(int id)
+        {
+            var department = _departmentRepository.GetById(id);
+            if (department is null) return false;
+            else
+            {
+                var res = _departmentRepository.Delete(department);
+                if (res > 0) return true;
+                else return false;
+            }
+        }
 
         //Types of Mapping 
         //1 Manual Mapping 

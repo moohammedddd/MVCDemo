@@ -1,6 +1,6 @@
 ﻿@model Demo.BusinessLogic.DTOs.DepartmentDtos.DepartmentDetailsDto
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Delete";
 }
 
 <h1 class="my-5 w-75">Department Details</h1>
@@ -60,7 +60,9 @@
         </div>
     </div>
     <div class="mt-4">
-        <a asp-action="Edit" asp-route-id="@Model.DeptId" class="btn btn-success">Edit</a>
-        <a asp-action="Index" class="btn btn-outline-dark">Back To list</a>
+        <form method="post" asp-controller="Department" asp-action="Delete" asp-route-id="@Model.DeptId">
+          <input type="submit" class="btn btn-danger" value="Delete" />
+            <a asp-action="Index" class="btn btn-outline-dark">Back To list</a>
+        </form>
     </div>
 </div>

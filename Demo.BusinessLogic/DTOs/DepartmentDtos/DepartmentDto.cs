@@ -4,15 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Demo.BusinessLogic.DTOs
+namespace Demo.BusinessLogic.DTOs.DepartmentDtos
 {
     public class DepartmentDto
     {
         public int DeptId { get; set; }
         public string Name { get; set; }
-        public string Code{ get; set; }
-        public string Description{ get; set; }
+        public string Code { get; set; }
+        public string Description { get; set; }
         public DateTime? DateOfCreation { get; set; }
-        
+
     }
 }

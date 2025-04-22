@@ -1,9 +1,12 @@
-﻿using System;
+﻿using DataAccessLayer.Models.Department;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using DataAccessLayer.Models.Employees;
+using Microsoft.EntityFrameworkCore;
 
 namespace DataAccessLayer.Contexts
 {
@@ -25,5 +28,6 @@ namespace DataAccessLayer.Contexts
         }
 
         public DbSet<Department> Departments { get; set; } 
+        public DbSet<Employee> Employees { get; set; }
     }
 }

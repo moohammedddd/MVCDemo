@@ -1,10 +1,14 @@
 using DataAccessLayer;
 using DataAccessLayer.Contexts;
 using DataAccessLayer.Migrations;
-using DataAccessLayer.Repositiories;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 using Microsoft.EntityFrameworkCore;
+using DataAccessLayer.Repositiories.Classes;
+using DataAccessLayer.Repositiories.Interfaces;
+using Demo.BusinessLogic.Services.Classes;
+using Demo.BusinessLogic.Services.Interfaces;
 using Demo.BusinessLogic.Services;
+using Demo.BusinessLogic.Profiels;
 
 namespace Demo.PresentationLayer
 {
@@ -39,6 +43,10 @@ namespace Demo.PresentationLayer
             //});
             builder.Services.AddScoped<IDepartmentRepository,DepartmentRepository>();
             builder.Services.AddScoped<IDepartmentServices,DepartmentServices>();
+            builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            builder.Services.AddScoped<IEmployeeServices, EmployeeServices>();
+            builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
+            builder.Services.AddAutoMapper(p => p.AddProfile(new MappingProfiles()));
             //contextLifetime: ServiceLifetime.Scoped, optionsLifetime: ServiceLifetime.Scoped
 
             #endregion

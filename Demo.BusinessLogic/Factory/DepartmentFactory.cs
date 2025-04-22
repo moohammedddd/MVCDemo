@@ -1,5 +1,5 @@
 ﻿using DataAccessLayer.Migrations;
-using Demo.BusinessLogic.DTOs;
+using Demo.BusinessLogic.DTOs.DepartmentDtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +12,7 @@ namespace Demo.BusinessLogic.Factory
     public static class DepartmentFactory
     {
         //Mapping Extension Method
-        public static DepartmentDto ToDepartmentDto(this DataAccessLayer.Models.Department department)
+        public static DepartmentDto ToDepartmentDto(this DataAccessLayer.Models.Department.Department department)
         {
             return new DepartmentDto()
             {
@@ -25,7 +25,7 @@ namespace Demo.BusinessLogic.Factory
         }
 
 
-        public static DepartmentDetailsDto ToDepartmentDetailsDto(this DataAccessLayer.Models.Department department)
+        public static DepartmentDetailsDto ToDepartmentDetailsDto(this DataAccessLayer.Models.Department.Department department)
         {
             return new DepartmentDetailsDto()
             {
@@ -40,9 +40,9 @@ namespace Demo.BusinessLogic.Factory
             };
         }
         
-        public static DataAccessLayer.Models.Department ToEntity(this CreateDepartmantDto dto)
+        public static DataAccessLayer.Models.Department.Department ToEntity(this CreateDepartmentDto dto)
         {
-            return new DataAccessLayer.Models.Department()
+            return new DataAccessLayer.Models.Department.Department()
             {
                 Name = dto.Name,
                 Code = dto.Code,
@@ -52,9 +52,9 @@ namespace Demo.BusinessLogic.Factory
             };
         }
 
-        public static DataAccessLayer.Models.Department ToEntity(this UpdateDepartmetnDto dto)
+        public static DataAccessLayer.Models.Department.Department ToEntity(this UpdateDepartmentDto dto)
         {
-            return new DataAccessLayer.Models.Department()
+            return new DataAccessLayer.Models.Department.Department()
             {
                 Id = dto.Id,
                 Name = dto.Name,

@@ -1,8 +1,10 @@
-﻿using Demo.BusinessLogic.Services;
-using DataAccessLayer.Repositiories;
+﻿using DataAccessLayer.Repositiories;
 using Microsoft.AspNetCore.Mvc;
 using Demo.BusinessLogic.DTOs;
 using Demo.PresentationLayer.ViewModel.DepartmentViews;
+using Demo.BusinessLogic.Services.Interfaces;
+using Demo.BusinessLogic.DTOs.DepartmentDtos;   
+
 
 namespace Demo.PresentationLayer.Controllers
 {
@@ -18,6 +20,7 @@ namespace Demo.PresentationLayer.Controllers
             return View(departments);
         }
 
+        #region Create
         [HttpGet]
         public IActionResult Create()
 
@@ -26,26 +29,26 @@ namespace Demo.PresentationLayer.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Create(CreateDepartmantDto createDepartmantDto)
+        public IActionResult Create(CreateDepartmentDto createDepartmentDto)
 
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    int? result = departmentServices.CreateDepartment(createDepartmantDto);
-                    if(result > 0) return RedirectToAction(nameof(Index)); //Back to List
+                    int? result = departmentServices.CreateDepartment(createDepartmentDto);
+                    if (result > 0) return RedirectToAction(nameof(Index)); //Back to List
                     else
                     {
-                        ModelState.AddModelError(string.Empty,"Department cant be created");
-                        return View(createDepartmantDto);
+                        ModelState.AddModelError(string.Empty, "Department cant be created");
+                        return View(createDepartmentDto);
 
                     }
                 }
                 catch (Exception ex)
                 {
                     // Log the exception
-                   if(_enviroment.IsDevelopment())
+                    if (_enviroment.IsDevelopment())
                     {
                         ModelState.AddModelError(string.Empty, ex.Message);
                     }
@@ -53,22 +56,29 @@ namespace Demo.PresentationLayer.Controllers
                     {
                         ModelState.AddModelError(string.Empty, "An error occurred while creating the department.");
                     }
-                    return View(createDepartmantDto);
+                    return View(createDepartmentDto);
                 }
             }
-           
-                return View(createDepartmantDto);
-            
+
+            return View(createDepartmentDto);
+
         }
-        
+
+        #endregion
+
+        #region Details
         public IActionResult Details(int? Id)
         {
-            if(!Id.HasValue) return BadRequest();
+            if (!Id.HasValue) return BadRequest();
             var department = departmentServices.GetDepartmentById(Id.Value);
             if (department == null) return NotFound();
             return View(department);
         }
-        
+        #endregion
+
+
+
+        #region Edit
         [HttpGet] // Get : /Department/Edit/Id?
         public IActionResult Edit(int? Id)
         {
@@ -76,7 +86,7 @@ namespace Demo.PresentationLayer.Controllers
             var department = departmentServices.GetDepartmentById(Id.Value);
 
             //Map From DepartmentDetailsDto To DepartmentEditViewModel
-           
+
             if (department == null) return NotFound();
             else
             {
@@ -89,19 +99,19 @@ namespace Demo.PresentationLayer.Controllers
                 };
                 return View(departmentEditViewModel);
             }
-          
+
         }
 
-        [HttpPost ]
-        public IActionResult Edit([FromRoute]int  Id ,DepartmentEditViewModel departmentEditViewModel)
+        [HttpPost]
+        public IActionResult Edit([FromRoute] int Id, DepartmentEditViewModel departmentEditViewModel)
         {
 
-            if(!ModelState.IsValid) return View(departmentEditViewModel);
+            if (!ModelState.IsValid) return View(departmentEditViewModel);
             try
             {
-             
-                        // Map From DepartmentEdit ViewModel To UpdateDepartmentDto
-                var UpdatedDept = new UpdateDepartmetnDto()
+
+                // Map From DepartmentEdit ViewModel To UpdateDepartmentDto
+                var UpdatedDept = new UpdateDepartmentDto()
                 {
                     Id = Id,
                     Name = departmentEditViewModel.Name,
@@ -118,7 +128,7 @@ namespace Demo.PresentationLayer.Controllers
                 }
 
             }
-             catch (Exception ex)
+            catch (Exception ex)
             {
                 // Log the exception
                 if (_enviroment.IsDevelopment())
@@ -127,14 +137,57 @@ namespace Demo.PresentationLayer.Controllers
                 }
                 else
                 {
-                    _logger.LogError(ex.Message);   
+                    _logger.LogError(ex.Message);
                 }
-              
+
             }
             return View(departmentEditViewModel);
 
         }
-    
+        #endregion
+
+
+
+        #region Delete
+        [HttpGet]
+        //public IActionResult Delete(int? Id)
+        //{
+        //    if (!Id.HasValue) return BadRequest();
+        //    var department = departmentServices.GetDepartmentById(Id.Value);
+        //    if (department == null) return NotFound();
+        //    return View(department);
+        //}
+        [HttpPost]
+        public IActionResult Delete(int Id)
+        {
+            if(Id == 0) BadRequest();
+            try
+            {
+                var isDeleted = departmentServices.DeleteDepartment(Id);
+                if(isDeleted) return RedirectToAction(nameof(Index));
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Department cant be deleted");
+                    return View();
+                }       
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                if (_enviroment.IsDevelopment())
+                {
+                    ModelState.AddModelError(string.Empty, ex.Message);
+                }
+                else
+                {
+                    _logger.LogError(ex.Message);
+                }
+            }
+            return RedirectToAction(nameof(Delete),new {Id});
+        }
+        #endregion
+
+
     }
 
 
