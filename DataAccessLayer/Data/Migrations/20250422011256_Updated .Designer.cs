@@ -4,16 +4,19 @@ using DataAccessLayer.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace DataAccessLayer.Migrations
+namespace DataAccessLayer.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250422011256_Updated ")]
+    partial class Updated
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -87,9 +90,6 @@ namespace DataAccessLayer.Migrations
                     b.Property<DateTime?>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("DepartmentId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Email")
                         .HasColumnType("varchar(30)");
 
@@ -128,24 +128,7 @@ namespace DataAccessLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DepartmentId");
-
                     b.ToTable("Employees");
-                });
-
-            modelBuilder.Entity("DataAccessLayer.Models.Employees.Employee", b =>
-                {
-                    b.HasOne("DataAccessLayer.Models.Department.Department", "Department")
-                        .WithMany("Employees")
-                        .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.Navigation("Department");
-                });
-
-            modelBuilder.Entity("DataAccessLayer.Models.Department.Department", b =>
-                {
-                    b.Navigation("Employees");
                 });
 #pragma warning restore 612, 618
         }
