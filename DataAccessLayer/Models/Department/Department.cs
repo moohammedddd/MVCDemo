@@ -13,6 +13,8 @@ namespace DataAccessLayer.Models.Department
         public required string Code { get; set; }
         public string? Description { get; set; }
 
+        public virtual ICollection<Employee> Employees { get; set; } = new HashSet<Employee>();
+
 
     }
 }

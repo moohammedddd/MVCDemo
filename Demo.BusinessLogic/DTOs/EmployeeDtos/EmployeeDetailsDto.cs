@@ -22,10 +22,12 @@ namespace Demo.BusinessLogic.DTOs.EmployeeDtos
         public int LastModifiedBy { get; set; }
         public DateTime LastModifiedOn { get; set; }
 
+        public int DepartmentId { get; set; }
         #region Member To Configure
         public DateOnly HiringDate { get; set; } //MisMatch
         public string Gender { get; set; }
         public string EmployeeType { get; set; }
+        public string Department { get; set; } 
         #endregion
     }
 }

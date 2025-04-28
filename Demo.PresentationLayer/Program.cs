@@ -9,6 +9,7 @@ using Demo.BusinessLogic.Services.Classes;
 using Demo.BusinessLogic.Services.Interfaces;
 using Demo.BusinessLogic.Services;
 using Demo.BusinessLogic.Profiels;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Demo.PresentationLayer
 {
@@ -19,20 +20,25 @@ namespace Demo.PresentationLayer
             var builder = WebApplication.CreateBuilder(args);
 
             #region Add Services to the container
-            builder.Services.AddControllersWithViews();
+            builder.Services.AddControllersWithViews(options =>
+            {
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+            });
             builder.Services.AddDataAccessLayer(builder.Configuration);
             //builder.Services.AddScoped<DbContextOptions<AppDbContext>>();
 
             //builder.Services.AddScoped<AppDbContext>((ServicesProvider) =>
             //{
             //   // var options = ServicesProvider.GetRequiredService<DbContextOptions<AppDbContext>>();
-                
+
             //    var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
             //    optionsBuilder.UseSqlServer("ConnectionString");
             //    return new AppDbContext(optionsBuilder.Options);
             //});
             builder.Services.AddDbContext<AppDbContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            //options.UseLazyLoadingProxies
+           
 
             //builder.Services.AddDbContext<AppDbContext>(optionsBuilder =>
             //{
