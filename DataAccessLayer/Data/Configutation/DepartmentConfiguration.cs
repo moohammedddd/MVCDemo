@@ -15,7 +15,10 @@ namespace DataAccessLayer.Data.Configutation
             builder.Property(dept => dept.Description).HasColumnType("varchar(100)");
             builder.Property(dept => dept.CreatedBy).HasColumnType("varchar(100)");
             builder.Property(dept => dept.LastModifiedBy).HasColumnType("varchar(100)");
-
+            builder.HasMany(dept => dept.Employees)
+                .WithOne(emp => emp.Department)
+                .HasForeignKey(emp => emp.DepartmentId)
+                .OnDelete(DeleteBehavior.SetNull);
             base.Configure(builder);
 
 

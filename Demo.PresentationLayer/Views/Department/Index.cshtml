@@ -3,8 +3,84 @@
     ViewData["Title"] = "Index";
 }
 
+
+
+@if (!string.IsNullOrWhiteSpace(@ViewData["SpecialMsg01"] as string))
+{
+
+    <div aria-live="polite" aria-atomic="true" class="toast-container position-fixed p-3" style="bottom: 25px; right:25px; z-index: 100;">
+        <div class="toast fade show " role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <strong class="me-auto text-success"> Success!</strong>
+                <small>SpecialMsg01: View Data </small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                @ViewData["SpecialMsg01"]
+            </div>
+        </div>
+    </div>
+}
+
+@if (!string.IsNullOrWhiteSpace(TempData["SpecialMsg02"] as string))
+{
+<div aria-live="polite" aria-atomic="true" class="toast-container position-fixed p-3" style="bottom: 125px; right:25px; z-index: 100;">
+    <div class="toast fade show " role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <strong class="me-auto text-success"> Success!</strong>
+            <small>SpecialMsg02 : TempData</small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+                @TempData["SpecialMsg02"]
+        </div>
+    </div>
+</div>
+}
+
+@if (!string.IsNullOrWhiteSpace(TempData["SpecialMsg03"] as string))
+{
+    <div aria-live="polite" aria-atomic="true" class="toast-container position-fixed p-3" style="bottom: 125px; right:25px; z-index: 100;">
+        <div class="toast fade show " role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <strong class="me-auto text-success"> Success!</strong>
+                <small>SpecialMsg02 : TempData</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                @TempData["SpecialMsg03"]
+            </div>
+        </div>
+    </div>
+}
+@if (!string.IsNullOrWhiteSpace(TempData["SpecialMsg04"] as string))
+{
+    <div aria-live="polite" aria-atomic="true" class="toast-container position-fixed p-3" style="bottom: 125px; right:25px; z-index: 100;">
+        <div class="toast fade show " role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <strong class="me-auto text-success"> Success!</strong>
+                <small>SpecialMsg02 : TempData</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                @TempData["SpecialMsg04"]
+            </div>
+        </div>
+    </div>
+}
+@* <div class ="alert alert-success"> *@
+@*     @ViewData["Message1"] *@
+@*     <br /> *@
+@*     @ViewBag.Message1 *@
+
+@* </div> *@
+
 <h1>All Departments</h1>
 <a asp-controller="Department" asp-action="Create" class="btn btn-primary my-3">Create Department</a>
+
+
+
+
 
 @if (Model.Any())
 {
@@ -28,16 +104,9 @@
                     <td>@department.Name</td>
                     <td>@department.Description</td>
                     <td>@department.DateOfCreation</td>
-                    <td>
-                        <a class="btn btn-primary" asp-controller="Department" asp-action="Details" asp-route-id="@department.DeptId">
-                            <i class="fas fa-eye"></i> Details
-                        </a>
-                    </td>
-                    <td>
-                        <a class="btn btn-success" asp-controller="Department" asp-action="Edit" asp-route-id="@department.DeptId">
-                            <i class="fas fa-edit"></i> Edit
-                        </a>
-                    </td>
+                  
+                    @* HERE *@
+                    <partial name="_ButtonPartialView" model="department.DeptId" />
                     <td>
                         <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#DeleteModal-@department.DeptId">
                             <i class="fas fa-trash"></i> Delete

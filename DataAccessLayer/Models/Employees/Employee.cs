@@ -1,10 +1,11 @@
-﻿using DataAccessLayer.Models.Shared;
+﻿using DataAccessLayer.Migrations;
+using DataAccessLayer.Models.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using DataAccessLayer.Models.Department;
 namespace DataAccessLayer.Models.Employees
 {
     public class Employee : BaseEntity
@@ -20,5 +21,7 @@ namespace DataAccessLayer.Models.Employees
         public DateTime HiringDate { get; set; }
         public Gender Gender { get; set; }
         public EmployeeType EmployeeType { get; set; }
+        public int? DepartmentId { get; set; } = null!;
+        public virtual Department.Department? Department {get; set;}
     }
 }

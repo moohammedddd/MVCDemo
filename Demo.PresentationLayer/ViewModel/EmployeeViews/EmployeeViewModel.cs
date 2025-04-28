@@ -1,16 +1,13 @@
 ﻿using DataAccessLayer.Models.Employees;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using DataAccessLayer.Models.Shared;
 
-namespace Demo.BusinessLogic.DTOs.EmployeeDtos
+
+namespace Demo.PresentationLayer.ViewModel.EmployeeViews
+
 {
-    public class UpdateEmployeeDto
+    public class EmployeeViewModel
     {
-        public int Id { get; set; }
         [Required]
         [MaxLength(50, ErrorMessage = "Max length should be 50 character")]
         [MinLength(5, ErrorMessage = "Min length should be 5 characters")]
@@ -34,6 +31,7 @@ namespace Demo.BusinessLogic.DTOs.EmployeeDtos
         public Gender Gender { get; set; }
         public EmployeeType EmployeeType { get; set; }
 
-        public int? DepartmentId { get; set; }
+        [Display(Name = "Department")]
+        public int DepartmentId { get; set; }
     }
 }

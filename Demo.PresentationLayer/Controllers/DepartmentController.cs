@@ -9,13 +9,15 @@ using Demo.BusinessLogic.DTOs.DepartmentDtos;
 namespace Demo.PresentationLayer.Controllers
 {
     public class DepartmentController(IDepartmentServices departmentServices,
-       ILogger<DepartmentController> _logger,
-        IWebHostEnvironment _enviroment) : Controller
+                               ILogger<DepartmentController> _logger,
+                                IWebHostEnvironment _enviroment) : Controller
         
     {
         public IActionResult Index()
 
         {
+            //ViewData["Message1"] = "Welcome to the Department Index Page";  
+            //ViewBag.Message1 = "Welcome to the Department Index Page => ViewBag";
             var departments = departmentServices.GetAllDepartments();
             return View(departments);
         }
@@ -29,21 +31,32 @@ namespace Demo.PresentationLayer.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Create(CreateDepartmentDto createDepartmentDto)
+        public IActionResult Create(DepartmentViewModel departmentViewModel )
 
         {
             if (ModelState.IsValid)
             {
                 try
                 {
+                    var createDepartmentDto = new CreateDepartmentDto()
+                    {
+                        Name = departmentViewModel.Name,
+                        Code = departmentViewModel.Code,
+                        Description = departmentViewModel.Description,
+                        DateOfCreation = departmentViewModel.DateOfCreation
+                    };
+                    var message = string.Empty;
                     int? result = departmentServices.CreateDepartment(createDepartmentDto);
-                    if (result > 0) return RedirectToAction(nameof(Index)); //Back to List
+                    if (result > 0) message = "Department Created successfully "; //Back to List
                     else
                     {
-                        ModelState.AddModelError(string.Empty, "Department cant be created");
-                        return View(createDepartmentDto);
+                        message = "Department not Created successfully";
+
 
                     }
+                    ViewData["SpecialMsg01"] = message;
+                    TempData["SpecialMsg04"] = message;
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (Exception ex)
                 {
@@ -56,11 +69,11 @@ namespace Demo.PresentationLayer.Controllers
                     {
                         ModelState.AddModelError(string.Empty, "An error occurred while creating the department.");
                     }
-                    return View(createDepartmentDto);
+                    return View(departmentViewModel);
                 }
             }
 
-            return View(createDepartmentDto);
+            return View(departmentViewModel);
 
         }
 
@@ -90,7 +103,7 @@ namespace Demo.PresentationLayer.Controllers
             if (department == null) return NotFound();
             else
             {
-                var departmentEditViewModel = new DepartmentEditViewModel()
+                var departmentEditViewModel = new DepartmentViewModel()
                 {
                     Name = department.Name,
                     Code = department.Code,
@@ -102,8 +115,9 @@ namespace Demo.PresentationLayer.Controllers
 
         }
 
+        [ValidateAntiForgeryToken]
         [HttpPost]
-        public IActionResult Edit([FromRoute] int Id, DepartmentEditViewModel departmentEditViewModel)
+        public IActionResult Edit([FromRoute] int Id, DepartmentViewModel departmentEditViewModel)
         {
 
             if (!ModelState.IsValid) return View(departmentEditViewModel);
@@ -111,6 +125,7 @@ namespace Demo.PresentationLayer.Controllers
             {
 
                 // Map From DepartmentEdit ViewModel To UpdateDepartmentDto
+                var message = string.Empty;
                 var UpdatedDept = new UpdateDepartmentDto()
                 {
                     Id = Id,
@@ -120,12 +135,22 @@ namespace Demo.PresentationLayer.Controllers
                     DateOfCreation = departmentEditViewModel.DateOfCreation
                 };
                 var result = departmentServices.UpdateDepartment(UpdatedDept);
-                if (result > 0) return RedirectToAction(nameof(Index)); //Back to List
+                if (result > 0)
+                {
+                    message = "Department updated Successfully";
+                     //Back to List
+                    
+
+                }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Department cant be updated");
+                    //ModelState.AddModelError(string.Empty, "Department cant be updated");
+                    message = "Department not Updated Successfully";
                     return View(departmentEditViewModel);
                 }
+                ViewData["SpecialMsg01"] = message;
+                TempData["SpecialMsg03"] = message;
+                return RedirectToAction(nameof(Index));
 
             }
             catch (Exception ex)
@@ -164,12 +189,16 @@ namespace Demo.PresentationLayer.Controllers
             try
             {
                 var isDeleted = departmentServices.DeleteDepartment(Id);
-                if(isDeleted) return RedirectToAction(nameof(Index));
-                else
-                {
-                    ModelState.AddModelError(string.Empty, "Department cant be deleted");
-                    return View();
-                }       
+                var message = string.Empty;
+                if(isDeleted)  message = "Department Deleted Successfully";
+                else message = "Department cant be deleted";
+                
+                   
+                    //return View();
+                    ViewData["SpecialMsg01"] = message;
+                    TempData["SpecialMsg02"] = message;
+               
+                return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {

@@ -11,8 +11,8 @@ namespace Demo.BusinessLogic.Services.Interfaces
 {
     public interface IEmployeeServices
     {
-        IEnumerable<GetEmployeeDto> GetAllDepartment();
-        EmployeeDetailsDto GetDepartmentById(int id);
+        IEnumerable<GetEmployeeDto> GetAllEmployees();
+        EmployeeDetailsDto GetEmployeeById(int id);
         int? UpdateEmployeeDto(UpdateEmployeeDto  updateEmployeeDto);
         bool DeleteEmployee(int id);
         int? CreateEmployee(CreateEmployeeDto creatEmployeetDto);

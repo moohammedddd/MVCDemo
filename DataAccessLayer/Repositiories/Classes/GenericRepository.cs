@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -54,5 +55,28 @@ namespace DataAccessLayer.Repositiories.Classes
             return _dbContext.SaveChanges();
 
         }
+
+        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<TEntity, TResult>> selector)
+        {
+            return _dbContext.Set<TEntity>()
+                .Select(selector)
+                .ToList();
+         }
+
+        //IEnumerable<TEntity> IGenericRepository<TEntity>.GetAll<TResult>(Expression<Func<TEntity, TResult>> selector)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+
+        //public IEnumerable<TEntity> GetIEnumerable()
+        //{
+        //    return _dbContext.Set<TEntity>().ToList();
+        //}
+
+        //public IQueryable<TEntity> GetQueryable()
+        //{
+        //    return _dbContext.Set<TEntity>().AsQueryable();
+        //}
     }
 }
