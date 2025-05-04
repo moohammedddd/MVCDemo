@@ -2,6 +2,7 @@
 using DataAccessLayer.Models.Employees;
 using DataAccessLayer.Repositiories.Interfaces;
 using Demo.BusinessLogic.DTOs.EmployeeDtos;
+using Demo.BusinessLogic.Services.AttchmentServices;
 using Demo.BusinessLogic.Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -13,13 +14,14 @@ using System.Threading.Tasks;
 
 namespace Demo.BusinessLogic.Services.Classes
 {
-    public class EmployeeServices(IEmployeeRepository _employeeRepository , IMapper _mapper) : IEmployeeServices
+    public class EmployeeServices(IUnitOfWork _unitOfWork , IMapper _mapper ,
+        IAttchmentServices _attchmentServices ) : IEmployeeServices
     {
 
 
-        public IEnumerable<GetEmployeeDto> GetAllEmployees()
+        public IEnumerable<GetEmployeeDto> GetAllEmployees(string? EmployeeSearchByName)
         {
-            //var employee = _employeeRepository.GetAll(e => new GetEmployeeDto()
+            //var employee = _unitOfWork .EmployeeRepository.GetAll(e => new GetEmployeeDto()
             //{
             //    Id = e.Id,
             //    Name = e.Name,
@@ -44,10 +46,17 @@ namespace Demo.BusinessLogic.Services.Classes
             // Return TDestination(Mapped Object)
             // IMapper.Map<TDestination>(TSource)
             // IMapper.Map<TSource , TDestination>(TSource)
-            var employees = _employeeRepository.GetAll();
+            IEnumerable<Employee> employees;
+            if(string.IsNullOrEmpty(EmployeeSearchByName))
+            
+                 employees = _unitOfWork .EmployeeRepository.GetAll();
+            else
+            
+
+             employees = _unitOfWork .EmployeeRepository.GetAll(e => e.Name.ToLower().Contains(EmployeeSearchByName.ToLower())); // using .contain to make search match more fast 
             var employeesDtos = _mapper.Map<IEnumerable<GetEmployeeDto>>(employees);
             return employeesDtos;
-            //var res = _employeeRepository.GetIEnumerable() // local sequence
+            //var res = _unitOfWork .EmployeeRepository.GetIEnumerable() // local sequence
             //    .Select(emp => new GetEmployeeDto()
             //    {
             //        Id = emp.Id,
@@ -57,7 +66,7 @@ namespace Demo.BusinessLogic.Services.Classes
             //    });
 
             //return res;
-            //var res = _employeeRepository.GetQueryable()// local sequence
+            //var res = _unitOfWork .EmployeeRepository.GetQueryable()// local sequence
             //  .Select(emp => new GetEmployeeDto()
             //  {
             //      Id = emp.Id,
@@ -73,7 +82,7 @@ namespace Demo.BusinessLogic.Services.Classes
 
         public EmployeeDetailsDto? GetEmployeeById(int id)
         {
-            var emp = _employeeRepository.GetById(id);
+            var emp = _unitOfWork .EmployeeRepository.GetById(id);
             if (emp is null) return null;
             //Make Profiles for active the automapping 
             return _mapper.Map<EmployeeDetailsDto>(emp);
@@ -82,31 +91,53 @@ namespace Demo.BusinessLogic.Services.Classes
 
         public int? CreateEmployee(CreateEmployeeDto creatEmployeetDto)
         {
+            // Call Attchment Service to Upload Employee Image 
             var mappedEmployee = _mapper.Map<Employee>(creatEmployeetDto);
-            var res = _employeeRepository.Add(mappedEmployee);
-            return res;
+            var imgName = _attchmentServices.Upload(creatEmployeetDto.Image, "Images");
+            mappedEmployee.ImageName = imgName;
+            _unitOfWork .EmployeeRepository.Add(mappedEmployee);
+            return _unitOfWork.SaveChanges();
         }
 
      
         public int? UpdateEmployeeDto(UpdateEmployeeDto updateEmployeeDto)
         {
             var mappedEmployee = _mapper.Map<Employee>(updateEmployeeDto);
-            var res = _employeeRepository.Edit(mappedEmployee);
-            return res;
+            _unitOfWork .EmployeeRepository.Edit(mappedEmployee);
+            return _unitOfWork.SaveChanges();
         }
 
         public bool DeleteEmployee(int id)
         {
-            var employee = _employeeRepository.GetById(id);
+            var employee = _unitOfWork .EmployeeRepository.GetById(id);
             if (employee is null) return false;
             else
             {
                 employee.IsDeleted = true;
-                var res = _employeeRepository.Delete(employee);
-                if (res > 0) return true;
-                else return false;
+                 _unitOfWork .EmployeeRepository.Delete(employee);
+                return _unitOfWork.SaveChanges()  > 0 ? true : false;
+              
             }
         }
+   
+      public bool CreatePurchase()
+        {
+            //Purchase => insert Record | Done
+            //Product => Update Quantities | Fail
+            //Stores => Update Quantities| Done
+            // Summary We Can Say Save Changes it should be in business layer
+
+
+            //Save changes
+             _unitOfWork.SaveChanges();
+            return true;
+        }
+        public bool DeleteSale()
+        {
+            return true;
+        }
+    
+    
     }
     }
 

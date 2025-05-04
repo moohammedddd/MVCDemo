@@ -32,6 +32,11 @@ namespace Demo.PresentationLayer.ViewModel.EmployeeViews
         public EmployeeType EmployeeType { get; set; }
 
         [Display(Name = "Department")]
-        public int DepartmentId { get; set; }
+        public int? DepartmentId { get; set; }
+        public IFormFile? Image { get; set; }
+
+
+        public string? ImgUrl { get; set; }
+
     }
 }

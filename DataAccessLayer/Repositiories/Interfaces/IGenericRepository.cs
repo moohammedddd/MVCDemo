@@ -10,11 +10,12 @@ namespace DataAccessLayer.Repositiories.Interfaces
 {
     public interface IGenericRepository<TEntity> where TEntity : BaseEntity
     {
-        int Add(TEntity Entity);
-        int Delete(TEntity Entity);
-        int Edit(TEntity Entity);
-        IEnumerable<TEntity> GetAll(bool withTracking = false);
+        void Add(TEntity Entity);
+        void Delete(TEntity Entity);
+        void Edit(TEntity Entity);
+        IEnumerable<TEntity> GetAll( bool withTracking = false);
         IEnumerable<TResult> GetAll<TResult>(Expression<Func<TEntity,TResult>> selector);
+        IEnumerable<TEntity> GetAll(Expression<Func<TEntity,bool>> filter);
         TEntity? GetById(int id);
 
         //IEnumerable<TEntity> GetIEnumerable();
