@@ -13,12 +13,12 @@ namespace Demo.PresentationLayer.Controllers
                                 IWebHostEnvironment _enviroment) : Controller
         
     {
-        public IActionResult Index()
+        public IActionResult Index(string? DepartmentSearch)
 
         {
             //ViewData["Message1"] = "Welcome to the Department Index Page";  
-            //ViewBag.Message1 = "Welcome to the Department Index Page => ViewBag";
-            var departments = departmentServices.GetAllDepartments();
+            //ViewBag.Message1 = "Welcome to the Department Index Page => ViewBag"
+            var departments = departmentServices.GetAllDepartments(DepartmentSearch);
             return View(departments);
         }
 

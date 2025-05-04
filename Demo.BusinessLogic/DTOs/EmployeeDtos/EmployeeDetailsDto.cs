@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,9 @@ namespace Demo.BusinessLogic.DTOs.EmployeeDtos
         public DateTime LastModifiedOn { get; set; }
 
         public int DepartmentId { get; set; }
+
+        public string? ImageName { get; set; }
+        public string? ImageDesc { get; set; }
         #region Member To Configure
         public DateOnly HiringDate { get; set; } //MisMatch
         public string Gender { get; set; }

@@ -10,6 +10,7 @@ using Demo.BusinessLogic.Services.Interfaces;
 using Demo.BusinessLogic.Services;
 using Demo.BusinessLogic.Profiels;
 using Microsoft.AspNetCore.Mvc;
+using Demo.BusinessLogic.Services.AttchmentServices;
 
 namespace Demo.PresentationLayer
 {
@@ -36,7 +37,11 @@ namespace Demo.PresentationLayer
             //    return new AppDbContext(optionsBuilder.Options);
             //});
             builder.Services.AddDbContext<AppDbContext>(options =>
-            options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            {
+            options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+            options.UseLazyLoadingProxies();
+            });
+
             //options.UseLazyLoadingProxies
            
 
@@ -47,12 +52,14 @@ namespace Demo.PresentationLayer
             // );
 
             //});
-            builder.Services.AddScoped<IDepartmentRepository,DepartmentRepository>();
+           // builder.Services.AddScoped<IDepartmentRepository,DepartmentRepository>();
             builder.Services.AddScoped<IDepartmentServices,DepartmentServices>();
-            builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            //builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             builder.Services.AddScoped<IEmployeeServices, EmployeeServices>();
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
             builder.Services.AddAutoMapper(p => p.AddProfile(new MappingProfiles()));
+            builder.Services.AddScoped<IAttchmentServices , AttchmentServices>();
             //contextLifetime: ServiceLifetime.Scoped, optionsLifetime: ServiceLifetime.Scoped
 
             #endregion

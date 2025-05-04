@@ -9,6 +9,19 @@
 <br />
 <br />
 <a class="btn btn-primary" asp-controller="Employees" asp-action="Create">Create Employee</a>
+
+<div class="m-2">
+    <form asp-action="index" class="row offset-2" method="get">
+        <div class="col-8">
+            <input class="form-control" type="text" name="EmployeeSearchByName" placeholder="Search Employee" />
+        </div>
+        <div class="col-4">
+            <input type="submit" class="btn btn-outline-success" value="Search" />
+        </div>
+    </form>
+</div>
+
+
 <br />
 @if (Model.Any())
 {

@@ -16,15 +16,36 @@ namespace DataAccessLayer.Repositiories.Classes
 
         // CRUD operation 
         //get all
-        public IEnumerable<TEntity> GetAll(bool withTracking = false)
+        #region Get methods
+
+  
+        public IEnumerable<TEntity> GetAll( bool withTracking = false)
         {
             //var Set<TEntity> = _dbContext.Set<TEntity>.ToList();
             if (withTracking)
-                return _dbContext.Set<TEntity>().ToList();
+                return _dbContext.Set<TEntity>().Where(e => e.IsDeleted != true).ToList();
             else
                 return _dbContext.Set<TEntity>().AsNoTracking().ToList();
 
 
+        }
+
+
+        //filter to make search 
+        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<TEntity, TResult>> selector)
+        {
+            return _dbContext.Set<TEntity>()
+                .Select(selector)
+                .ToList();
+        }
+
+        public IEnumerable<TEntity> GetAll(Expression<Func<TEntity, bool>> filter)
+        {
+
+            return _dbContext.Set<TEntity>()
+                .Where(e => e.IsDeleted != true)
+                .Where(filter)
+                .ToList();
         }
 
         //get ById
@@ -34,34 +55,30 @@ namespace DataAccessLayer.Repositiories.Classes
             return Employee;
         }
 
-
+        #endregion
         //add 
-        public int Add(TEntity entity)
+        public void Add(TEntity entity)
         {
             _dbContext.Set<TEntity>().Add(entity);
-            return _dbContext.SaveChanges();
+            
         }
 
         //edit 
-        public int Edit(TEntity entity)
+        public void Edit(TEntity entity)
         {
             _dbContext.Set<TEntity>().Update(entity);
-            return _dbContext.SaveChanges();
+       
         }
         //Delete
-        public int Delete(TEntity entity)
+        public void Delete(TEntity entity)
         {
             _dbContext.Set<TEntity>().Remove(entity);
-            return _dbContext.SaveChanges();
+           
 
         }
 
-        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<TEntity, TResult>> selector)
-        {
-            return _dbContext.Set<TEntity>()
-                .Select(selector)
-                .ToList();
-         }
+        
+    
 
         //IEnumerable<TEntity> IGenericRepository<TEntity>.GetAll<TResult>(Expression<Func<TEntity, TResult>> selector)
         //{

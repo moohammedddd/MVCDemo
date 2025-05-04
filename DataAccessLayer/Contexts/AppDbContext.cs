@@ -7,19 +7,22 @@ using System.Text;
 using System.Threading.Tasks;
 using DataAccessLayer.Models.Employees;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace DataAccessLayer.Contexts
 {
-    public class AppDbContext:DbContext
+    public class AppDbContext(DbContextOptions<AppDbContext> options) :IdentityDbContext
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
-        {
+        //public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+        //{
 
-        }
+        //}
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseLazyLoadingProxies();
+           // optionsBuilder.UseLazyLoadingProxies();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -29,5 +32,10 @@ namespace DataAccessLayer.Contexts
 
         public DbSet<Department> Departments { get; set; } 
         public DbSet<Employee> Employees { get; set; }
+
+        public DbSet<IdentityUser> Users { get; set; }
+        public DbSet<IdentityRole> Roles { get; set; }
+
+
     }
 }
